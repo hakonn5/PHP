@@ -18,9 +18,7 @@ if (in_array($dayOfWeek, [2, 4, 6])) {
 echo "<b>№ | Фамилия Имя   | График работы </b><br>";
 echo "1 | John Styles   | $johnSchedule <br>";
 echo "2 | Jane Doe      | $janeSchedule <br>";
-?>
 
-<?php
 echo "<h3>1. Цикл FOR с выводом промежуточных значений</h3>";
 $a = 0;
 $b = 0;
@@ -31,9 +29,7 @@ for ($i = 0; $i <= 5; $i++) {
     echo "Шаг $i: a = $a, b = $b <br>";
 }
 echo "<b>End of the loop: a = $a, b = $b</b><br><br>";
-?>
 
-<?php
 echo "<h3>2. Цикл WHILE</h3>";
 $a = 0;
 $b = 0;
