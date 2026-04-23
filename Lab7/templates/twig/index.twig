@@ -1,0 +1,26 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+    <h1>Добавить новую привычку</h1>
+
+    {% if successMessage %}
+        <div class="success-msg">{{ successMessage }}</div>
+    {% endif %}
+
+    {% if errorMessages is not empty %}
+        <div class="error-msg">
+            <ul>
+                {% for error in errorMessages %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% include 'form.twig' %}
+
+    <hr style="margin: 40px 0;">
+
+    <h2>Мои привычки</h2>
+    {% include 'list.twig' %}
+{% endblock %}

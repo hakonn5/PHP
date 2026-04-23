@@ -1,8 +1,16 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Класс для генерации HTML-представления транзакций.
+ */
 final class TransactionTableRenderer
 {
+    /**
+     * Генерирует HTML-таблицу на основе переданного массива транзакций.
+     * @param Transaction[] $transactions Массив транзакций для вывода
+     * @return string HTML-код таблицы
+     */
     public function render(array $transactions): string
     {
         $html = "<table class='transaction-table'>";

@@ -1,33 +1,68 @@
 <?php
 declare(strict_types=1);
 
-require_once 'JsonStorage.php';
-require_once 'FormHandler.php';
+require_once 'Validators.php';
 
-$storage = new JsonStorage('data.json');
-$handler = new FormHandler($storage);
+$dataFile = 'data.json';
+if (!file_exists($dataFile)) {
+    file_put_contents($dataFile, json_encode([]));
+}
 
 $successMessage = '';
 $errorMessages = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($handler->handle($_POST)) {
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+    $name = htmlspecialchars(trim($_POST['name'] ?? ''));
+    $description = htmlspecialchars(trim($_POST['description'] ?? ''));
+    $startDate = htmlspecialchars(trim($_POST['start_date'] ?? ''));
+    $category = htmlspecialchars(trim($_POST['category'] ?? ''));
+    $isDaily = isset($_POST['is_daily']);
+
+    // Применение интерфейса валидаторов (Задание 1)
+    $reqVal = new RequiredValidator();
+    $minLenVal = new MinLengthValidator(3);
+
+    if ($err = $reqVal->validate($name) ?? $minLenVal->validate($name)) {
+        $errorMessages[] = "Название: " . $err;
+    }
+    if ($err = $reqVal->validate($description)) {
+        $errorMessages[] = "Описание: " . $err;
+    }
+    if ($err = $reqVal->validate($startDate)) {
+        $errorMessages[] = "Дата начала: " . $err;
+    }
+
+    if (empty($errorMessages)) {
+        $habit = [
+            'id' => uniqid('hab_'),
+            'name' => $name,
+            'description' => $description,
+            'start_date' => $startDate,
+            'category' => $category,
+            'is_daily' => $isDaily,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        
+        $json = file_get_contents($dataFile);
+        $data = json_decode($json, true) ?: [];
+        $data[] = $habit;
+        file_put_contents($dataFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        
         $successMessage = "Привычка успешно добавлена!";
-    } else {
-        $errorMessages = $handler->getErrors();
     }
 }
 
-$habits = $storage->fetchAll();
+$json = file_get_contents($dataFile);
+$habits = json_decode($json, true) ?: [];
 $sortColumn = $_GET['sort'] ?? 'created_at';
 
-usort($habits, function(Habit $a, Habit $b) use ($sortColumn) {
+usort($habits, function($a, $b) use ($sortColumn) {
     if ($sortColumn === 'name') {
-        return strcmp($a->name, $b->name);
+        return strcmp($a['name'], $b['name']);
     } elseif ($sortColumn === 'category') {
-        return strcmp($a->category, $b->category);
+        return strcmp($a['category'], $b['category']);
     }
-    return strtotime($b->createdAt) <=> strtotime($a->createdAt);
+    return strtotime($b['created_at']) <=> strtotime($a['created_at']);
 });
 ?>
 
@@ -112,12 +147,12 @@ usort($habits, function(Habit $a, Habit $b) use ($sortColumn) {
             <?php else: ?>
                 <?php foreach ($habits as $habit): ?>
                     <tr>
-                        <td><?= htmlspecialchars($habit->name) ?></td>
-                        <td><?= nl2br(htmlspecialchars($habit->description)) ?></td>
-                        <td><?= htmlspecialchars($habit->category) ?></td>
-                        <td><?= htmlspecialchars($habit->startDate) ?></td>
-                        <td><?= $habit->isDaily ? '✅ Да' : '❌ Нет' ?></td>
-                        <td><?= htmlspecialchars(date('d.m.Y H:i', strtotime($habit->createdAt))) ?></td>
+                        <td><?= htmlspecialchars($habit['name']) ?></td>
+                        <td><?= nl2br(htmlspecialchars($habit['description'])) ?></td>
+                        <td><?= htmlspecialchars($habit['category']) ?></td>
+                        <td><?= htmlspecialchars($habit['start_date']) ?></td>
+                        <td><?= $habit['is_daily'] ? '✅ Да' : '❌ Нет' ?></td>
+                        <td><?= htmlspecialchars(date('d.m.Y H:i', strtotime($habit['created_at']))) ?></td>
                     </tr>
                 <?php endforeach; ?>
             <?php endif; ?>

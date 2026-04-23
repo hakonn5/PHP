@@ -1,0 +1,28 @@
+<table>
+    <thead>
+        <tr>
+            <th><a href="?engine=twig&sort=name">Название ↕</a></th>
+            <th>Описание</th>
+            <th><a href="?engine=twig&sort=category">Категория ↕</a></th>
+            <th>Дата старта</th>
+            <th>Ежедневно?</th>
+            <th><a href="?engine=twig&sort=created_at">Добавлено ↕</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if habits is empty %}
+            <tr><td colspan="6" style="text-align: center;">Список пока пуст. Создайте первую привычку!</td></tr>
+        {% else %}
+            {% for habit in habits %}
+                <tr>
+                    <td>{{ habit.name }}</td>
+                    <td>{{ habit.description | nl2br }}</td>
+                    <td>{{ habit.category | category_icon }}</td>
+                    <td>{{ habit.start_date }}</td>
+                    <td>{{ habit.is_daily ? '✅ Да' : '❌ Нет' }}</td>
+                    <td>{{ habit.created_at | date('d.m.Y H:i') }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>

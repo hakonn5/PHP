@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Трекер привычек{% endblock %}</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div style="margin-bottom: 20px; text-align: right;">
+        <strong>Движок:</strong>
+        {% if engine == 'native' %}
+            <span>Native PHP</span>
+        {% else %}
+            <a href="?engine=native">Native PHP</a>
+        {% endif %}
+        |
+        {% if engine == 'twig' %}
+            <span>Twig</span>
+        {% else %}
+            <a href="?engine=twig">Twig</a>
+        {% endif %}
+    </div>
+
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

@@ -8,12 +8,6 @@ require_once 'ValidatorInterface.php';
  */
 class RequiredValidator implements ValidatorInterface
 {
-    /**
-     * Проверяет, что значение не пустое.
-     *
-     * @param mixed $value Значение для проверки
-     * @return string|null Сообщение об ошибке или null, если валидация пройдена
-     */
     public function validate(mixed $value): ?string
     {
         if (empty(trim((string)$value))) {
@@ -28,19 +22,8 @@ class RequiredValidator implements ValidatorInterface
  */
 class MinLengthValidator implements ValidatorInterface
 {
-    /**
-     * Конструктор валидатора длины строки.
-     *
-     * @param int $minLength Минимально допустимая длина
-     */
     public function __construct(private int $minLength) {}
 
-    /**
-     * Проверяет, что длина строки не меньше заданной.
-     *
-     * @param mixed $value Значение для проверки
-     * @return string|null Сообщение об ошибке или null, если валидация пройдена
-     */
     public function validate(mixed $value): ?string
     {
         if (mb_strlen(trim((string)$value)) < $this->minLength) {
