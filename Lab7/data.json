@@ -1,1 +1,29 @@
-[]
+[
+    {
+        "id": "hab_69fda8bd12f75",
+        "name": "Бегит",
+        "description": "2 раза в день",
+        "start_date": "2026-05-08",
+        "category": "Спорт",
+        "is_daily": true,
+        "created_at": "2026-05-08 09:11:25"
+    },
+    {
+        "id": "hab_69fda8cf751de",
+        "name": "Качат прес",
+        "description": "3 раза в день",
+        "start_date": "2026-05-09",
+        "category": "Спорт",
+        "is_daily": true,
+        "created_at": "2026-05-08 09:11:43"
+    },
+    {
+        "id": "hab_69fda8eb10937",
+        "name": "Уроки учит",
+        "description": "каждый день",
+        "start_date": "2026-05-01",
+        "category": "Обучение",
+        "is_daily": false,
+        "created_at": "2026-05-08 09:12:11"
+    }
+]
